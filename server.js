@@ -13,10 +13,32 @@ connectDB();
 
 const app = express();
 
+// ✅ CORS Configuration
+const allowedOrigins = [
+  'http://localhost:3000', // Local frontend
+  'https://your-frontend-domain.com', // Replace with your deployed frontend
+  'https://carrentalfrontend.onrender.com', // Example Render frontend URL
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman or mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (!allowedOrigins.includes(origin)) {
+        const msg = 'The CORS policy does not allow access from this origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true, // ✅ Allows cookies and auth headers
+  })
+);
+
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-app.use(cors());
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -40,20 +62,18 @@ app.get('/', (req, res) => {
       cars: '/api/cars',
       upload: '/api/upload',
       bookings: '/api/bookings',
-      admin: '/api/admin'
-    }
+      admin: '/api/admin',
+    },
   });
 });
 
 // 404 handler
-// 404 handler (for all undefined routes)
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found'
+    message: 'Route not found',
   });
 });
-
 
 // Error handler
 app.use(require('./middleware/errorHandler'));
