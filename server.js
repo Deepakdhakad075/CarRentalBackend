@@ -17,7 +17,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000', // Local frontend
   'https://zoomcarride.onrender.com', // Replace with your deployed frontend
-  'https://carrental-frontend-rguy.onrender.com', // Example Render frontend URL
+  'https://zoomridecarss.onrender.com', // Example Render frontend URL
 ];
 
 app.use(
