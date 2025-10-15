@@ -16,7 +16,7 @@ const app = express();
 // ✅ CORS Configuration
 const allowedOrigins = [
   'http://localhost:3000', // Local frontend
-  'https://your-frontend-domain.com', // Replace with your deployed frontend
+  'https://zoomcarride.onrender.com', // Replace with your deployed frontend
   'https://carrental-frontend-rguy.onrender.com', // Example Render frontend URL
 ];
 
