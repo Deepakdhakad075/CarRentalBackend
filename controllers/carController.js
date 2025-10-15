@@ -241,3 +241,51 @@ exports.searchCarsByLocation = async (req, res) => {
     });
   }
 };
+// VERIFY OR REJECT CAR (ADMIN ONLY)
+exports.verifyCar = async (req, res) => {
+  try {
+    const { status } = req.body; // expected values: 'verify' or 'reject'
+
+    // check if admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Only admin can verify or reject cars'
+      });
+    }
+
+    const car = await Car.findById(req.params.id);
+
+    if (!car) {
+      return res.status(404).json({
+        success: false,
+        message: 'Car not found'
+      });
+    }
+
+    if (status === 'verify') {
+      car.isVerified = true;
+    } else if (status === 'reject') {
+      car.isVerified = false;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid status value. Use "verify" or "reject"'
+      });
+    }
+
+    await car.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Car ${status === 'verify' ? 'verified' : 'rejected'} successfully`,
+      data: car
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+};
