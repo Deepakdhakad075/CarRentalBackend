@@ -13,13 +13,21 @@ const app = express();
 // ✅ Fully open CORS setup
 app.use(
   cors({
-    origin: '*',
+    origin: [
+      'https://zoomridecarss.onrender.com', // ✅ deployed frontend
+      'http://localhost:3000',              // ✅ local development
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ['Content-Disposition'],
+    credentials: true, // optional — allows cookies/auth headers if needed
   })
 );
+
+// Allow preflight requests
 app.options(/.*/, cors());
+
+
 
 // Middleware
 app.use(express.json({ limit: '50mb' }));
