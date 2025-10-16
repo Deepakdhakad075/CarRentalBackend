@@ -107,12 +107,15 @@ const app = express();
 // ✅ Open CORS for all origins
 app.use(
   cors({
-    origin: '*', // Allow all origins
+    origin: '*', // Allow all domains
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Disposition'], // Optional: for file downloads
   })
 );
 
+// ✅ Handle preflight requests for all routes
+app.options('*', cors());
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
